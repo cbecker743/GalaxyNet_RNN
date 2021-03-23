@@ -1,3 +1,1 @@
 # GalaxyNet_RNN
-
-test
