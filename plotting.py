@@ -1875,14 +1875,14 @@ def compare_chi2(chi2_em, chi2_mod, lw=4, fs=15):
     plt.savefig('Compare_Chi2.png',dpi=100, bbox_inches = 'tight',
     pad_inches = 0.1)
     plt.show()
-    
-def plot_main_branches(df_RNN, df_RNN_RL, df_NN, df_NN_RL, fs = 25, lw=3,file=None):
+
+def plot_main_branches(df_RNN, df_RNN_RL, df_NN, df_NN_RL, fs = 35, lw=4.5,file=None):
     fig, axs = plt.subplots(5, 2, figsize=(40,60),gridspec_kw={'hspace': 0, 'wspace': 0.2}, sharex='all')
     eins = [0,0,1,0,2,0,3,0,4,0]
     zwei = [0,0,0,1,0,2,0,3,0,4]
     xticks = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
     yticks = [6,7,8,9,10,11]
-    
+
 
     for counter, i in enumerate(range(len(df_RNN))):
         if i & 1 == 0:
@@ -1901,11 +1901,13 @@ def plot_main_branches(df_RNN, df_RNN_RL, df_NN, df_NN_RL, fs = 25, lw=3,file=No
             axs[eins[counter], 0].tick_params(axis='both', direction='in', which = 'both', bottom=True, top=True, left=True, right=True, labelsize=fs)
             axs[eins[counter], 0].tick_params(width=lw*1.0, length=4*lw, which='major', direction='in', pad=fs/2)
             axs[eins[counter], 0].set_xticks(xticks)
-            axs[eins[counter], 0].set_xticklabels([0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0],fontsize=fs*0.7)
+            axs[eins[counter], 0].set_xticklabels([0.1,0.2,0.3,0.4,_,0.6,_,0.8,_,1.0],fontsize=fs)
             #axs[eins[counter], 0].set_xlim(0.01,1.0)
             axs[eins[counter], 0].set_yticks(yticks)
             axs[eins[counter], 0].set_ylim(5,12)
-            axs[eins[counter], 0].legend(loc='best', fontsize='xx-large')
+            axs[eins[counter], 0].legend(loc='best', fontsize=fs*0.85)
+            if counter != 0:
+                axs[eins[counter], 0].get_legend().remove()
             for axis in ['top','bottom','left','right']:
                 axs[eins[counter], 0].spines[axis].set_linewidth(lw)
         else:
@@ -1924,18 +1926,20 @@ def plot_main_branches(df_RNN, df_RNN_RL, df_NN, df_NN_RL, fs = 25, lw=3,file=No
             axs[zwei[counter], 1].tick_params(axis='both', direction='in', which = 'both', bottom=True, top=True, left=True, right=True, labelsize=fs)
             axs[zwei[counter], 1].tick_params(width=lw*1.0, length=4*lw, which='major', direction='in', pad=fs/2)
             axs[zwei[counter], 1].set_xticks(xticks)
-            axs[zwei[counter], 1].set_xticklabels([0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0],fontsize=fs*0.7)
+            axs[zwei[counter], 1].set_xticklabels([0.1,0.2,0.3,0.4,_,0.6,_,0.8,_,1.0],fontsize=fs)
             #axs[zwei[counter], 1].set_xlim(0.01,1.0)
             axs[zwei[counter], 1].set_yticks(yticks)
             axs[zwei[counter], 1].set_ylim(5,12)
-            axs[zwei[counter], 1].legend(loc='best', fontsize='xx-large')
+            axs[zwei[counter], 1].legend(loc='best', fontsize=fs)
+            if counter != 0:
+                axs[zwei[counter], 1].get_legend().remove()
             for axis in ['top','bottom','left','right']:
                 axs[zwei[counter], 1].spines[axis].set_linewidth(lw)
-            
+
     #fig.suptitle('Comparison of RNN and NN results for several main branches', fontsize=40, y =0.92)
     if file is not None:
-            plt.savefig(file, dpi=100, bbox_inches = 'tight',
-    pad_inches = 0.1)
+        plt.savefig(file, dpi=100, bbox_inches = 'tight',
+                    pad_inches = 0.1)
     plt.show()
 
 def plot_baryon_efficiency(df, fs = 25, lw=3, file=None):
@@ -2053,35 +2057,6 @@ def plot_baryon_efficiency_2(df, compare_list, fs = 25, lw=3, file=None):
 
     plt.show()
 
-def plot_main_branches(df_RNN, df_NN, fs = 15, lw=3,file=None):
-    fig, axs = plt.subplots(len(df_RNN), 2, figsize=(15,20),gridspec_kw={'hspace': 0, 'wspace': 0.2})
-    mstar  = np.linspace(5.0,12.0,1000)
-    j=-1
-    for i in range(len(df_RNN)):
-        axs[i, 0].scatter(df_RNN[i]['mstar_integrated'],df_RNN[i]['Stellar_mass'], color='b',  label='RNN')
-        # c=df_RNN[i]['Scale'],cmap='winter',
-        axs[i, 0].scatter(df_NN[i]['mstar_integrated'],df_NN[i]['Stellar_mass'], color='r', label='NN')
-        # c=df_NN[i]['Scale'],cmap='autumn'
-        axs[i, 0].set_xlabel('$\ (m_*)_\mathrm{integrated}$', fontsize = fs)
-        axs[i, 0].set_ylabel('$\ (m_*)_\mathrm{label}$', fontsize = fs)
-        axs[i, 0].plot(mstar,mstar,'black')
-        if i == 0:
-            axs[i, 0].legend()
-        axs[j+1, 1].scatter(df_RNN[i]['mstar_integrated'],df_RNN[i]['mstar_pred'], color='b', label='RNN')
-        axs[j+1, 1].scatter(df_NN[i]['mstar_integrated'],df_NN[i]['mstar_pred'], color='r', label='NN')
-        axs[j+1, 1].set_xlabel('$\ (m_*)_\mathrm{integrated}$', fontsize = fs)
-        axs[j+1, 1].set_ylabel('$\ (m_*)_\mathrm{prediction}$', fontsize = fs)
-        axs[j+1, 1].plot(mstar,mstar,'black')
-        if i == 0:
-            axs[j+1, 1].legend() 
-        j += 1
-        
-    fig.suptitle('Comparison of RNN and NN results several for main branches', fontsize=20, y =0.92)
-
-    if file is not None:
-            plt.savefig(file)
-    plt.show()
-    
 def plot_main_sequence_panel_RNN_RL(
     fig,
     X,
